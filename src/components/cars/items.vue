@@ -15,10 +15,10 @@
 				<span class="search-results-icon"></span>
 				{{ item.model }}
 			</div> 
-			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.regnum }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 10%;">{{ item.year }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 25%;">{{ item.name }} {{ item.name1 }} {{ item.name2 }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 10%; left: 40px">{{ item.phone }} </div>
+			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.id }}</div>
+			<div class="search-results-item search-results-sender"  style="width: 10%;">{{ item.date }}</div>
+			<div class="search-results-item search-results-sender"  style="width: 25%;">{{ item.message }} {{ item.name1 }} {{ item.name2 }}</div>
+			<div class="search-results-item search-results-sender"  style="width: 10%; left: 40px">{{ item.message }} </div>
 		</div> 
 	</div>
 
@@ -46,6 +46,34 @@ export default {
 	  }
 	},
 	created() {
+		if (window.ws == undefined) {
+			window.ws = new WebSocket('ws://ui-socket.herokuapp.com');
+ 
+		}
+		ws.onerror = (e) => {
+			appConfig.notifications.items.push(this.notification);
+		};
+		
+		ws.onopen = () => {
+			ws.send('Hello   + appConfig.socket.name +   !!!'); 
+		};
+
+		ws.onmessage = (e) => {
+			let d = new Date; 
+			let messageObject = e.data;
+			console.log(this.items)
+			this.items.unshift({
+				id: +new Date(),
+				name: messageObject.split('###')[1],
+				date: d.toTimeString().split(' ')[0],
+				message: messageObject.split('###')[0]
+			})
+			
+ 
+		};
+
+//---------------------------------------------------------------------------------------------------
+		
 		this.items = appConfig.cars.items.sort(this.sort).slice(0, 20);
 		this.filteredItems = appConfig.cars.items.sort(this.sort);
 		setTimeout(()=> {
@@ -56,7 +84,7 @@ export default {
 		
 		if (appConfig.cars.refresh) {
             appConfig.cars.refresh = false;
-			this.fetchData();
+			//this.fetchData();
 		}
 		
 		this.notification = {
@@ -155,6 +183,25 @@ export default {
 		})
 	},
 	methods: {
+	 	goSend() {
+			if (this.state.messageText == '') {
+				this.setState({
+					invalidValue: true
+				});
+				return;
+			}
+			
+			let messageObject;
+			messageObject = this.state.messageText + '###' + appConfig.socket.name;
+			
+			ws.send(messageObject);
+			
+			this.refs.textarea.value = '';
+			this.setState({
+				messageText: '',
+				showProgress: true
+			});
+		},
 		fetchData() {
 			this.status = 'loading';
 			this.$http.get(appConfig.URL + 'items/get', {headers: {'Authorization': appConfig.access_token}})
