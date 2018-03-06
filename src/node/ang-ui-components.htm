@@ -1,0 +1,155 @@
+<script src="angular.1.5.7.min.js"></script>
+<script src="angular-ui-router.js"></script>
+<html ng-app="app">
+<div ui-view></div>
+</html>
+
+<script>
+//-------------------------------------------------------------------------------------
+(function() {
+	angular
+		.module('app', ['ui.router']);
+		
+//----------------------------------------		
+        angular
+            .module('app')
+            .config(routeConfig);
+
+        function routeConfig($stateProvider, $urlRouterProvider) {
+		
+			resolveHerokuClients.$inject = ['$http', '$q'];
+			
+			function resolveHerokuClients($http, $q) {
+				var url = 'http://ui-warehouse.herokuapp.com/api/clients/get';
+				return $http.get(url)
+					.then(function (result) {
+						return result.data;
+					})
+					.catch(function (reject) {
+						return $q.reject(reject);
+					});
+ 			}			
+			
+			function resolveHerokuGoods($http, $q) {
+				var url = 'http://ui-warehouse.herokuapp.com/api/goods/get';
+				return $http.get(url)
+					.then(function (result) {
+						return result.data;
+					})
+					.catch(function (reject) {
+						return $q.reject(reject);
+					});
+ 			}			
+			
+			function resolveLocalAudit($http, $q) {
+				var url = 'http://localhost:3000/api/audit/get';
+				return $http.get(url)
+					.then(function (result) {
+						return result.data;
+					})
+					.catch(function (reject) {
+						return $q.reject(reject);
+					});
+ 			}
+	
+            $urlRouterProvider.otherwise('/home');	
+			
+			$stateProvider
+					.state('home', {
+                        url: '/home',
+ 						template: '<header title="Home"></header>'
+                     })	
+		  			 
+                    .state('clients', {
+                        url: '/clients',
+ 						template: '<header title="Clients"></header>' + 
+								  '<clients-component clients="$resolve.clients"></clients-component>',
+						resolve: {
+							clients: resolveHerokuClients
+						}
+                     })		 	
+					 
+                    .state('goods', {
+                        url: '/goods',
+ 						template: '<header title="Goods"></header>' + 
+								  '<goods-component goods="$resolve.goods"></goods-component>',
+						resolve: {
+							goods: resolveHerokuGoods
+						}
+                     })			
+					 
+                    .state('audit', {
+                        url: '/audit',
+ 						template: '<header title="Audit"></header>' + 
+								  '<audit-component audits="$resolve.audits"></audit-component>',
+						resolve: {
+							audits: resolveLocalAudit
+						}
+                     })						 
+		 }
+		 
+//----------------------------------------	
+ 	angular
+		.module('app')
+		.component('header', {
+			template: '<div><hr>' +
+						'<a style="color:blue" ui-sref="home">Home</a>&nbsp' +
+						'<a style="color:blue" ui-sref="clients">Clients</a>&nbsp' + 
+						'<a style="color:blue" ui-sref="goods">Goods</a>&nbsp' +
+						'<a style="color:blue" ui-sref="audit">Audit</a>' +
+						'&nbsp&nbsp&nbsp&nbsp&nbsp <b>{{vm.title}}</b>' +
+					  '<hr></div>',
+
+			bindings: {title: '@'}, 
+			controllerAs: 'vm',
+			controller: controller
+		});
+		
+		function controller() {
+			var vm = this;
+		}		 
+//----------------------------------------	
+ 	angular
+		.module('app')
+		.component('clientsComponent', {
+			template: '<div ng-repeat="client in vm.clients">{{client.name}}</div>',
+			bindings: {clients: '<'}, 
+			controllerAs: 'vm',
+			controller: controller
+		});
+		
+		function controller() {
+			var vm = this;
+		}
+		
+//----------------------------------------	
+ 	angular
+		.module('app')
+		.component('goodsComponent', {
+			template: '<div ng-repeat="good in vm.goods">{{good.name}}</div>',
+			bindings: {goods: '<'}, 
+			controllerAs: 'vm',
+			controller: controller
+		});
+		
+		function controller() {
+			var vm = this;
+		}	
+
+//----------------------------------------	
+ 	angular
+		.module('app')
+		.component('auditComponent', {
+			template: '<div ng-repeat="audit in vm.audits">{{audit.id}} - ' + 
+			'{{audit.description}} - {{audit.user}} - {{audit.date}} - {{audit.rro_id}}</div>',
+			bindings: {audits: '<'}, 
+			controllerAs: 'vm',
+			controller: controller
+		});
+		
+		function controller() {
+			var vm = this;
+		}	
+})();
+//-------------------------------------------------------------------------------------
+</script>
