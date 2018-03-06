@@ -7,8 +7,8 @@
 					box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.5); text-align: center;">
 				<div class="col-sm-12 d-flex flex-column justify-content-around">
 					<form class="align-self-center login-form" autocomplete="off">
-						<p class="h5" style="font-weight: bold;">GAI</p>
-						<img src="../../assets/img/logo.jpg" style="margin-bottom: 10px; width: 200px;"> 
+						<p class="h5" style="font-weight: bold;">Socket</p>
+						<img src="../../assets/img/logo.jpg" style="margin-bottom: 10px; width: 150px;"> 
 						<input v-model="name" type="text" class="form-control login-input" id="user" placeholder="Login">
 						<input v-model="pass" type="password" class="form-control login-input" id="password" placeholder="Password">
 						<input type="submit" value="Submit" class="btn btn-danger button-login" id="login" v-on:click="fetchData">
