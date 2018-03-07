@@ -18,7 +18,7 @@
 			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.id }}</div>
 			<div class="search-results-item search-results-sender"  style="width: 10%;">{{ item.date }}</div>
 			<div class="search-results-item search-results-sender"  style="width: 25%;">{{ item.message }} {{ item.name1 }} {{ item.name2 }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 10%; left: 40px">{{ item.message }} </div>
+			<div class="search-results-item search-results-sender"  style="width: 10%; left: 40px">{{ item.name }} </div>
 		</div> 
 	</div>
 
@@ -62,14 +62,14 @@ export default {
 			let d = new Date; 
 			let messageObject = e.data;
 			console.log(this.items)
-			this.items.unshift({
-				id: +new Date(),
-				name: messageObject.split('###')[1],
-				date: d.toTimeString().split(' ')[0],
-				message: messageObject.split('###')[0]
-			})
-			
- 
+			if (messageObject.split('###')[0] != 'still alive') {
+				this.items.unshift({
+					id: +new Date(),
+					name: messageObject.split('###')[1],
+					date: d.toTimeString().split(' ')[0],
+					message: messageObject.split('###')[0]
+				})
+			}
 		};
 
 //---------------------------------------------------------------------------------------------------
