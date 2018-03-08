@@ -7,14 +7,23 @@
 
 	<div v-else-if="status === 'show'" class="search-results-content">
  
-		<div class="payment" v-for="item in items" v-on:click="goSend(item)">
+		<div class="payment" v-for="item in items" 
+			v-bind:class="{ selected: (item.name !== name)}"
+			v-on:click="goSend(item)">			 
 			<div class="search-results-item search-results-choose"  style="width: 5%;">
 				<span class="circle"></span>
 			</div>
- 
-			<div class="search-results-item search-results-sender"  style="width: 10%;">{{ item.date }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.name }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 55%;">{{ item.message }}</div>
+
+			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.date }}</div>
+			
+			<div class="search-results-item search-results-result long-term"  style="width: 20%;">
+				<div class="search-results-icon"
+					v-bind:class="{ reded: (item.name !== name)}">
+				</div>
+				{{ item.name }}
+			</div>
+			
+			<div class="search-results-item search-results-sender"  style="width: 45%;">{{ item.message }}</div>
  
 		</div> 
 	</div>
@@ -43,6 +52,8 @@ export default {
 	  }
 	},
 	created() {
+		this.name = appConfig.name;
+		
 		if (window.ws == undefined) {
 			window.ws = new WebSocket('ws://ui-socket.herokuapp.com');
  
