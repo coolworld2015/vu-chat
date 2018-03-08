@@ -7,18 +7,15 @@
 
 	<div v-else-if="status === 'show'" class="search-results-content">
  
-		<div class="payment" v-for="item in items" v-on:click="showDetails(item)">
+		<div class="payment" v-for="item in items" v-on:click="goSend(item)">
 			<div class="search-results-item search-results-choose"  style="width: 5%;">
 				<span class="circle"></span>
 			</div>
-			<div class="search-results-item search-results-result long-term" style="width: 25%;">
-				<span class="search-results-icon"></span>
-				{{ item.model }}
-			</div> 
-			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.id }}</div>
+ 
 			<div class="search-results-item search-results-sender"  style="width: 10%;">{{ item.date }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 25%;">{{ item.message }} {{ item.name1 }} {{ item.name2 }}</div>
-			<div class="search-results-item search-results-sender"  style="width: 10%; left: 40px">{{ item.name }} </div>
+			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.name }}</div>
+			<div class="search-results-item search-results-sender"  style="width: 55%;">{{ item.message }}</div>
+ 
 		</div> 
 	</div>
 
@@ -55,7 +52,7 @@ export default {
 		};
 		
 		ws.onopen = () => {
-			ws.send('Hello   + appConfig.socket.name +   !!!'); 
+			ws.send('Hello '  + appConfig.name +  ' !!!'); 
 		};
 
 		ws.onmessage = (e) => {
@@ -73,17 +70,17 @@ export default {
 		};
 
 //---------------------------------------------------------------------------------------------------
-		
-		this.items = appConfig.cars.items.sort(this.sort).slice(0, 20);
-		this.filteredItems = appConfig.cars.items.sort(this.sort);
+	/*	
+		this.items = appConfig.sockets.items.sort(this.sort).slice(0, 20);
+		this.filteredItems = appConfig.sockets.items.sort(this.sort);
 		setTimeout(()=> {
 			if (document.querySelector('.search-results-content')) {
 				document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)
 			}
 		}, 100);
 		
-		if (appConfig.cars.refresh) {
-            appConfig.cars.refresh = false;
+		if (appConfig.sockets.refresh) {
+            appConfig.sockets.refresh = false;
 			//this.fetchData();
 		}
 		
@@ -98,8 +95,8 @@ export default {
 		})
 		appConfig.$on('searchQueryPhones', (searchQuery, searchType) => {
 			this.searchQuery = searchQuery;
-			let arr = [].concat(appConfig.cars.items);
-			let items = [].concat(appConfig.cars.items);
+			let arr = [].concat(appConfig.sockets.items);
+			let items = [].concat(appConfig.sockets.items);
 			
 			if (searchType == 'name') {
 				items = arr.filter((el) => el.name.toLowerCase().indexOf(searchQuery.toLowerCase()) != -1);
@@ -115,8 +112,8 @@ export default {
 			this.recordsCount = 20;
 			appConfig.$emit('itemsCount', items.length);
 			if (searchQuery == '') {
-				this.items = appConfig.cars.items.slice(0, 20);
-				this.filteredItems = appConfig.cars.items;
+				this.items = appConfig.sockets.items.slice(0, 20);
+				this.filteredItems = appConfig.sockets.items;
 			}
 		})
 		appConfig.$on('searchName', searchQuery => {
@@ -135,7 +132,7 @@ export default {
 							if(el.job == '') {el.job = 'n/a'}	
 							if(el.pos == '') {el.pos = 'n/a'}	
 						})
-						appConfig.cars.items = items;
+						appConfig.sockets.items = items;
 						this.items = items.slice(0, 20);
 						this.filteredItems = items;
 						appConfig.$emit('itemsCount', result.data.length);
@@ -166,7 +163,7 @@ export default {
 							if(el.job == '') {el.job = 'n/a'}	
 							if(el.pos == '') {el.pos = 'n/a'}	
 						})
-						appConfig.cars.items = items;
+						appConfig.sockets.items = items;
 						this.items = items.slice(0, 20);
 						this.filteredItems = items;
 						appConfig.$emit('itemsCount', result.data.length);
@@ -181,18 +178,20 @@ export default {
 					})
 				}
 		})
+	*/	
 	},
 	methods: {
 	 	goSend() {
+		/*
 			if (this.state.messageText == '') {
 				this.setState({
 					invalidValue: true
 				});
 				return;
 			}
-			
+		*/	
 			let messageObject;
-			messageObject = this.state.messageText + '###' + appConfig.socket.name;
+			messageObject = 'this.state.messageText' + '###' + appConfig.name;
 			
 			ws.send(messageObject);
 			
@@ -212,7 +211,7 @@ export default {
 						if(el.job == '') {el.job = 'n/a'}	
 						if(el.pos == '') {el.pos = 'n/a'}	
 					})
-					appConfig.cars.items = items;
+					appConfig.sockets.items = items;
 					this.items = items.slice(0, 20);
 					this.filteredItems = items;
 					this.status = 'show';

@@ -29,6 +29,7 @@ export default {
   },
 	created() {
 		appConfig.getAccessToken();
+		appConfig.getName();
 		if (appConfig.access_token == 'login') {
 			this.$router.push('login');
 		}

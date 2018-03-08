@@ -54,6 +54,8 @@ export default {
 				.then(result => {
 					appConfig.access_token = result.body.token;
 					localStorage.setItem('access_token', result.body.token);
+					appConfig.name = this.name;
+					localStorage.setItem('name', this.name);
 					this.loading = false;
 					this.error = false;
 					this.$router.push('cars');

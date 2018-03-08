@@ -42,7 +42,7 @@ export default {
 	name: 'users-footer',
 	data() {
 	  return {
-		count: appConfig.cars.items.length
+		count: appConfig.sockets.items.length
 	  }
 	},
 	created() {

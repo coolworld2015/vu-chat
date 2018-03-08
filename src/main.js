@@ -15,8 +15,9 @@ const appConfig = new Vue();
 appConfig.URL ='https://jwt-gai.herokuapp.com/api/';
 
 appConfig.getAccessToken = ()=> {appConfig.access_token = localStorage.getItem('access_token');};
+appConfig.getName = ()=> {appConfig.name = localStorage.getItem('name');};
 
-appConfig.cars = { items: [], refresh: true };
+appConfig.sockets = { items: [], refresh: true };
 appConfig.audits = { items: [] };
 appConfig.users = { items: [] };
 appConfig.notifications = {items: []}
