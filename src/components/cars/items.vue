@@ -9,7 +9,7 @@
  
 		<div class="payment" v-for="item in items" 
 			v-bind:class1="{ selected: (item.name == name)}"
-			v-on:click="goSend(item)">			 
+			v-on:click1="goSend(item)">			 
 			<div class="search-results-item search-results-choose"  style="width: 5%;">
 				<span class="circle"></span>
 			</div>

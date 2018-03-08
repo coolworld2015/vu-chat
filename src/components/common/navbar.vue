@@ -7,16 +7,16 @@
 						v-on:click="changeView()" 
 					/>  
 					<span style="font-weight: bold; color: white; font-size: 20px; text-shadow: #000 0.15em 0.15em 0.15em;">
-						GAI 
+						Socket 
 					</span>
 				</li>  								 
 				<li class="fp-nav-item fp-nav-item-right">
-				  <span class="fp-nav-link menu-block-header">GAI</span>
+				  <span class="fp-nav-link menu-block-header">Socket</span>
 				</li>				
 				
 				<li class="fp-nav-item fp-nav-item-right" v-on:click="changeRoute('cars')" 
 					v-bind:class="{ active: cars }">
-					<span class="fp-nav-link">Cars</span>
+					<span class="fp-nav-link">Socket</span>
 				</li>				
 <!--				
 				<li class="fp-nav-item fp-nav-item-right" v-on:click="changeRoute('phones')" 
@@ -40,7 +40,7 @@
 			
 			<ul class="h-100 fp-nav-left">
 				<li class="fp-nav-item fp-nav-item-left li-border-bottom" v-on:click="changeView()">
-					<span class="fp-nav-link" id="showNav" title="GAI">GA</span>
+					<span class="fp-nav-link" id="showNav" title="Socket">SO</span>
 					<span class="hot-key-hint">~</span>
 				</li>
 				<li class="fp-nav-item fp-nav-item-left">
@@ -50,7 +50,7 @@
 				
 				<li class="fp-nav-item fp-nav-item-left" v-on:click="changeRoute('cars')" 
 					v-bind:class="{ active: cars }">
-					<span class="fp-nav-link" title="Items">CA</span>
+					<span class="fp-nav-link" title="Items">SO</span>
 					<span class="hot-key-hint">2</span>
 				</li>				
 <!--				

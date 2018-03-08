@@ -1,6 +1,6 @@
 <template>
 	<header class="header d-flex justify-content-center align-items-center">
-		<form v-show="name" class="search-form" id="search" style="display: block; position: absolute; top: -55px;">
+		<form v-show="name" class="search-form" id="search" style="display: block; position: absolute; top: -55px; width: 450px;">
 			<input type="text" class="form-control" placeholder="Send message" 
 				v-model="searchQuery" v-on:click="searchClear" v-on:keyup="changeView">
 				
