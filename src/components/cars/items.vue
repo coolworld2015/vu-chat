@@ -8,13 +8,13 @@
 	<div v-else-if="status === 'show'" class="search-results-content">
  
 		<div class="payment" v-for="item in items" 
-			v-bind:class="{ selected: (item.name !== name)}"
+			v-bind:class1="{ selected: (item.name == name)}"
 			v-on:click="goSend(item)">			 
 			<div class="search-results-item search-results-choose"  style="width: 5%;">
 				<span class="circle"></span>
 			</div>
 
-			<div class="search-results-item search-results-sender"  style="width: 15%;">{{ item.date }}</div>
+			<div class="search-results-item search-results-sender"  style="width: 20%;">{{ item.date }}</div>
 			
 			<div class="search-results-item search-results-result long-term"  style="width: 20%;">
 				<div class="search-results-icon"
@@ -68,18 +68,29 @@ export default {
 
 		ws.onmessage = (e) => {
 			let d = new Date; 
+			//let todayDate = d.getMonth() + 1 + '/' + (d.getDate()) + '/' + d.getFullYear();
+			let todayDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + (d.getDate());
 			let messageObject = e.data;
 			console.log(this.items)
 			if (messageObject.split('###')[0] != 'still alive') {
 				this.items.unshift({
 					id: +new Date(),
 					name: messageObject.split('###')[1],
-					date: d.toTimeString().split(' ')[0],
+					date: todayDate + ' ' + d.toTimeString().split(' ')[0],
 					message: messageObject.split('###')[0]
 				})
 			}
+			appConfig.$emit('itemsCount', this.items.length);
 		};
-
+		
+		appConfig.$on('searchName', searchQuery => {
+			console.log(searchQuery)
+			let messageObject;
+			messageObject = searchQuery + '###' + appConfig.name;
+			
+			ws.send(messageObject);	
+ 
+		});
 //---------------------------------------------------------------------------------------------------
 	/*	
 		this.items = appConfig.sockets.items.sort(this.sort).slice(0, 20);
@@ -206,11 +217,7 @@ export default {
 			
 			ws.send(messageObject);
 			
-			this.refs.textarea.value = '';
-			this.setState({
-				messageText: '',
-				showProgress: true
-			});
+ 
 		},
 		fetchData() {
 			this.status = 'loading';
