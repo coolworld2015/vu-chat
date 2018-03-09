@@ -68,7 +68,6 @@ export default {
 
 		ws.onmessage = (e) => {
 			let d = new Date; 
-			//let todayDate = d.getMonth() + 1 + '/' + (d.getDate()) + '/' + d.getFullYear();
 			let todayDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + (d.getDate());
 			let messageObject = e.data;
 			console.log(this.items)
