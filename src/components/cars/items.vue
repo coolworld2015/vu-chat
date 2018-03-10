@@ -67,15 +67,15 @@ export default {
 		};
 
 		ws.onmessage = (e) => {
-			let d = new Date; 
-			let todayDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + (d.getDate());
+			let date = new Date().toJSON().slice(0, 10);
+			let time = new Date().toTimeString().slice(0, 8);
 			let messageObject = e.data;
 			console.log(this.items)
 			if (messageObject.split('###')[0] != 'still alive') {
 				this.items.unshift({
 					id: +new Date(),
 					name: messageObject.split('###')[1],
-					date: todayDate + ' ' + d.toTimeString().split(' ')[0],
+					date: date + ' ' + time,
 					message: messageObject.split('###')[0]
 				})
 			}

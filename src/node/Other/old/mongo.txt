@@ -26,11 +26,19 @@ db.hello.find()
 db.dropDatabase()
 
 -----------------------------------------------------------------------------------------------------
+//To connect using a driver via the standard MongoDB URI
+mongoose.connect('mongodb://admin:admin@ds111059.mlab.com:11059/jwt-chat', options);
+
+-----------------------------------------------------------------------------------------------------
 //Get data from MongoLab
 mongoexport -h ds053728.mongolab.com:53728 -d warehouse -c audits -u admin -p admin -o audits1.json
 mongoexport -h ds053728.mongolab.com:53728 -d warehouse -c clients -u admin -p admin -o clients1.json
 mongoexport -h ds053728.mongolab.com:53728 -d warehouse -c goods -u admin -p admin -o goods1.json
 mongoexport -h ds053728.mongolab.com:53728 -d warehouse -c users -u admin -p admin -o users1.json
+
+-----------------------------------------------------------------------------------------------------
+//Set data to MongoLab
+mongoimport -h ds111059.mlab.com:11059 -d jwt-chat -c users -u admin -p admin --file users1.json
 
 -----------------------------------------------------------------------------------------------------
 //Set localData from files

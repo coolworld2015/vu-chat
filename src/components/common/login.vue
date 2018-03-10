@@ -45,7 +45,7 @@ export default {
 		fetchData() {
 			this.loading = true;
 			this.error = false;
-			this.$http.post('https://jwt-gai.herokuapp.com/api/login', 
+			this.$http.post(appConfig.URL + 'login', 
 				{
 					name: this.name,
 					pass: this.pass,
