@@ -52,11 +52,13 @@ export default {
 	  }
 	},
 	created() {
+		this.fetchData();
+		
 		this.name = appConfig.name;
 		
 		if (window.ws == undefined) {
-			//window.ws = new WebSocket('ws://ui-socket.herokuapp.com');
-			window.ws = new WebSocket('ws://localhost:3000');
+			window.ws = new WebSocket('ws://jwt-chat.herokuapp.com');
+			//window.ws = new WebSocket('ws://localhost:3000');
  
 		}
 		ws.onerror = (e) => {
@@ -92,6 +94,12 @@ export default {
 			ws.send(messageObject);	
  
 		});
+		
+		this.notification = {
+			title: 'Something went wrong',
+			message: 'Server responded with status code error',
+			important: true
+		}
 //---------------------------------------------------------------------------------------------------
 	/*	
 		this.items = appConfig.sockets.items.sort(this.sort).slice(0, 20);
@@ -107,11 +115,7 @@ export default {
 			//this.fetchData();
 		}
 		
-		this.notification = {
-			title: 'Something went wrong',
-			message: 'Server responded with status code error',
-			important: true
-		}
+ 
 		appConfig.$on('clearHeader', () => {
 			this.status = 'show';
 			setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
@@ -222,20 +226,17 @@ export default {
 		},
 		fetchData() {
 			this.status = 'loading';
-			this.$http.get(appConfig.URL + 'items/get', {headers: {'Authorization': appConfig.access_token}})
+			this.$http.get(appConfig.URL + 'messages/get', {headers: {'Authorization': appConfig.access_token}})
 				.then(result => {
+				console.log(result.data)
 					let items = result.data.sort(this.sort);
-					items.forEach((el)=>{
-						if(el.phone == '') {el.phone = 'n/a'}	
-						if(el.job == '') {el.job = 'n/a'}	
-						if(el.pos == '') {el.pos = 'n/a'}	
-					})
-					appConfig.sockets.items = items;
-					this.items = items.slice(0, 20);
-					this.filteredItems = items;
+ 
+					//appConfig.messages.items = items;
+					this.items = items.slice(0, 2000);
+					//this.filteredItems = items;
 					this.status = 'show';
 					appConfig.$emit('itemsCount', result.data.length);
-					setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
+					//setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
 				}).catch((error)=> {
 					appConfig.notifications.items.push(this.notification);
 					this.status = 'show';
@@ -266,12 +267,12 @@ export default {
 			this.$router.push('car-edit');
 		},
 		sort(a, b) {
-			let nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+			let nameA = +a.id, nameB = +b.id;
 			if (nameA < nameB) {
-				return -1
+				return 1
 			}
 			if (nameA > nameB) {
-				return 1
+				return -1
 			}
 			return 0;
 		}				

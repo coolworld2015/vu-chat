@@ -12,8 +12,8 @@ import './assets/css/style.css'
 import './assets/css/font-awesome-4.7.0/css/font-awesome.min.css';
 
 const appConfig = new Vue();
-//appConfig.URL ='https://jwt-chat.herokuapp.com/api/';
-appConfig.URL ='http://localhost:3000/api/';
+appConfig.URL ='https://jwt-chat.herokuapp.com/api/';
+//appConfig.URL ='http://localhost:3000/api/';
 
 appConfig.getAccessToken = ()=> {appConfig.access_token = localStorage.getItem('access_token');};
 appConfig.getName = ()=> {appConfig.name = localStorage.getItem('name');};
