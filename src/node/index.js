@@ -50,7 +50,7 @@ webSocketServer.on('connection', (ws) => {
 	console.log('new connection ' + id);
 	
 	var timeID = setInterval(function() {
-		//ws.send('still alive', function() {  })
+		ws.send('still alive', function() {  })
 	}, 30000)
 
 	ws.on('close', function() {
