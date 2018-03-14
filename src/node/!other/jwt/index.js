@@ -2,19 +2,18 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-
 const PORT = process.env.PORT || 3000;
+
 //------------------------------------------------------------------------
 var jwt = require('jsonwebtoken');
 var secret = 'f3oLigPb3vGCg9lgL0Bs97wySTCCuvYdOZg9zqTY32o';
-
 var token = jwt.sign({auth:  'magic'}, secret, { expiresIn: 60 * 60 });
 
 setInterval(function(){
 	token = jwt.sign({auth:  'magic'}, secret, { expiresIn: 60 * 60 });
 	}, 1000 * 60 * 60);
 
-
+//------------------------------------------------------------------------
 const server = express()
 	.use( (req, res, next) => {
 		res.header('Access-Control-Allow-Origin', '*'); 
@@ -31,6 +30,7 @@ const server = express()
 	
 	.post('/api/login', Login)
 	.get('/api/users/get', Users)
+	.get('/api/messages/get', Messages)
 	.get('/api/auth', (req, res) => res.send(token))
  
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`))
@@ -55,15 +55,52 @@ webSocketServer.on('connection', (ws) => {
 	});
 
 	ws.on('message', function(message) {
-		console.log('message received ' + message);
+		
+		// Message start
+				var MessagesModel = require('./mongo').MessagesModel;
+				var date = new Date().toJSON().slice(0, 10);
+				var time = new Date().toTimeString().slice(0, 8);
+				var now = date + ' ' + time;
+				MessagesModel.create({
+						id: + new Date(),
+						name: 'TEST req.body.name',
+						date: now,
+						message: message
+				});
+		// Message end
+				
+		console.log('message received ' + message + '###' + now);
 		for (var key in clients) {
-			clients[key].send(message);
+			clients[key].send(message + '###' + now);
 			//this.send(message);
 		}
 	});  
 });
 
 //------------------------------------------------------------------------
+ function Messages(req, res) {
+	var agent = req.headers.authorization;
+	
+	jwt.verify(agent, secret, function(err, decoded) {
+		if (err) {
+			return res.status(403).send({ 
+				success: false, 
+				message: 'No token provided.' 
+			});
+		} else {
+			var MessagesModel = require('./mongo').MessagesModel;
+			return MessagesModel.find(function (err, messages) {
+				if (!err) {
+					return res.send(messages);
+				} else {
+					res.statusCode = 500;
+					return res.send({error: 'Server error'});
+				}
+			}).limit(1000);
+		}
+	});
+ }
+
  function Login(req, res) {
 	var UsersModel = require('./mongo').UsersModel;
     UsersModel.findOne({ name: req.body.name }, function (err, user) {

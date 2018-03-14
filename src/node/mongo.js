@@ -18,14 +18,15 @@ db.once('open', function callback() {
 var Schema = mongoose.Schema;
 
 //---------------------------------------------------------------------------------------------
-var Items = new Schema({
+var Messages = new Schema({
     id: {type: String, required: true},
     name: {type: String, required: true},
-    phone: {type: String, required: true}
+    date: {type: String, required: true},
+    message: {type: String, required: true}
 });
 
-var ItemsModel = mongoose.model('Items', Items);
-module.exports.ItemsModel = ItemsModel;
+var MessagesModel = mongoose.model('Messages', Messages);
+module.exports.MessagesModel = MessagesModel;
 
 //---------------------------------------------------------------------------------------------
 var Users = new Schema({
