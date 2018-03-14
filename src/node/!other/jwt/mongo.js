@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var options = { server: { socketOptions: { connectTimeoutMS: 60000 }}};
 
-mongoose.connect('mongodb://admin:admin@ds111059.mlab.com:11059/jwt-chat', options);
+mongoose.connect('mongodb://admin:admin@ds011238.mongolab.com:11238/ui-gai', options);
 //mongoose.connect('mongodb://localhost:27017/ui-base'); //TODO ONLY for Local INSTANCE MongoDB
 
 var db = mongoose.connection;
@@ -18,15 +18,14 @@ db.once('open', function callback() {
 var Schema = mongoose.Schema;
 
 //---------------------------------------------------------------------------------------------
-var Messages = new Schema({
+var Items = new Schema({
     id: {type: String, required: true},
     name: {type: String, required: true},
-    date: {type: String, required: true},
-    message: {type: String, required: true}
+    phone: {type: String, required: true}
 });
 
-var MessagesModel = mongoose.model('Messages', Messages);
-module.exports.MessagesModel = MessagesModel;
+var ItemsModel = mongoose.model('Items', Items);
+module.exports.ItemsModel = ItemsModel;
 
 //---------------------------------------------------------------------------------------------
 var Users = new Schema({

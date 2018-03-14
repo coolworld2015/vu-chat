@@ -64,7 +64,7 @@ export default {
 		};
 		
 		ws.onopen = () => {
-			ws.send('Hello '  + appConfig.name +  ' !!!'); 
+			//ws.send('Hello '  + appConfig.name +  ' !!!'); 
 		};
 
 		ws.onmessage = (e) => {

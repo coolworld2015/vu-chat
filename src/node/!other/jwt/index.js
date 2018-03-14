@@ -1,109 +1,49 @@
-'use strict';
-
 var express = require('express');
 var bodyParser = require('body-parser');
-const PORT = process.env.PORT || 3000;
+var app = express();
+
+app.use(bodyParser({limit: '50mb'}));
+
+app.listen(process.env.PORT || 3000, function () {
+    console.log('Server is running on 3000');
+});
+
+app.get('/', function (req, res) {
+	//res.sendFile(__dirname + '/build/index.html');
+	//res.sendFile(__dirname + '/auth.html');			//	MUST REMOVE !!!
+    res.send('It is just API Server...');
+});
+
+//app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/build'));
+
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, accept, authorization');
+    next();
+});
 
 //------------------------------------------------------------------------
 var jwt = require('jsonwebtoken');
 var secret = 'f3oLigPb3vGCg9lgL0Bs97wySTCCuvYdOZg9zqTY32o';
+
 var token = jwt.sign({auth:  'magic'}, secret, { expiresIn: 60 * 60 });
 
 setInterval(function(){
 	token = jwt.sign({auth:  'magic'}, secret, { expiresIn: 60 * 60 });
 	}, 1000 * 60 * 60);
 
-//------------------------------------------------------------------------
-const server = express()
-	.use( (req, res, next) => {
-		res.header('Access-Control-Allow-Origin', '*'); 
-		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');  
-		res.header('Access-Control-Allow-Headers', 'Content-Type, accept, authorization'); 
-		next();
-	})
-	.use(bodyParser({limit: '50mb'}))
-	
-	.get('/',(req, res) => res.sendFile(__dirname + '/auth.html'))
- 
-	.get('/api/items/get', (req, res) => res.send('Items...'))	
-	.get('/api/audit/get', (req, res) => res.send('Audit...'))
-	
-	.post('/api/login', Login)
-	.get('/api/users/get', Users)
-	.get('/api/messages/get', Messages)
-	.get('/api/auth', (req, res) => res.send(token))
- 
-	.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-
-//------------------------------------------------------------------------
-var SocketServer = require('ws').Server;
-var webSocketServer = new SocketServer({ server });
-var clients = {};
-
-webSocketServer.on('connection', (ws) => {
-	var id = +new Date();
-	clients[id] = ws;
-	console.log('new connection ' + id);
-	
-	var timeID = setInterval(function() {
-		ws.send('still alive', function() {  })
-	}, 30000)
-
-	ws.on('close', function() {
-		console.log('connection closed ' + id);
-		delete clients[id];
-	});
-
-	ws.on('message', function(message) {
-		
-		// Message start
-				var MessagesModel = require('./mongo').MessagesModel;
-				var date = new Date().toJSON().slice(0, 10);
-				var time = new Date().toTimeString().slice(0, 8);
-				var now = date + ' ' + time;
-				MessagesModel.create({
-						id: + new Date(),
-						name: 'TEST req.body.name',
-						date: now,
-						message: message
-				});
-		// Message end
-				
-		console.log('message received ' + message + '###' + now);
-		for (var key in clients) {
-			clients[key].send(message + '###' + now);
-			//this.send(message);
-		}
-	});  
+app.get('/api/auth', function(req, res) {
+	return res.send(token);
 });
 
 //------------------------------------------------------------------------
- function Messages(req, res) {
-	var agent = req.headers.authorization;
-	
-	jwt.verify(agent, secret, function(err, decoded) {
-		if (err) {
-			return res.status(403).send({ 
-				success: false, 
-				message: 'No token provided.' 
-			});
-		} else {
-			var MessagesModel = require('./mongo').MessagesModel;
-			return MessagesModel.find(function (err, messages) {
-				if (!err) {
-					return res.send(messages);
-				} else {
-					res.statusCode = 500;
-					return res.send({error: 'Server error'});
-				}
-			}).limit(1000);
-		}
-	});
- }
-
- function Login(req, res) {
+app.post('/api/login', function(req, res) {
 	var UsersModel = require('./mongo').UsersModel;
-    UsersModel.findOne({ name: req.body.name }, function (err, user) {
+    UsersModel.findOne({
+        name: req.body.name
+    }, function (err, user) {
         if (err) {
             res.send({error: err.message});
         } 
@@ -143,33 +83,8 @@ webSocketServer.on('connection', (ws) => {
 		}
 
     });
- }
- 
- function Users(req, res) {
-	var agent = req.headers.authorization;
-	//console.log('agent - ' + agent);
-	
-	jwt.verify(agent, secret, function(err, decoded) {
-		if (err) {
-			return res.status(403).send({ 
-				success: false, 
-				message: 'No token provided.' 
-			});
-		} else {
-			//console.log(decoded);
-			var UsersModel = require('./mongo').UsersModel;
-			return UsersModel.find(function (err, users) {
-				if (!err) {
-					return res.send(users);
-				} else {
-					res.statusCode = 500;
-					return res.send({error: 'Server error'});
-				}
-			});
-		}
-	});
-}
-/*
+});
+
 //------------------------------------------------------------------------
 app.get('/api/users/get', function(req, res) {
 	var agent = req.headers.authorization;
@@ -411,5 +326,3 @@ app.get('/api/items/findByPhone/:name', function(req, res) {
 		}
 	});
 });
-
-*/
