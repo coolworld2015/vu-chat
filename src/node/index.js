@@ -65,11 +65,12 @@ webSocketServer.on('connection', (ws) => {
 				var date = new Date().toJSON().slice(0, 10);
 				var time = new Date().toTimeString().slice(0, 8);
 				var now = date + ' ' + time;
+				console.log(message)
 				MessagesModel.create({
 						id: + new Date(),
-						name: 'TEST req.body.name',
+						name: message.split('###')[1],
 						date: now,
-						message: message
+						message: message.split('###')[0]
 				});
 		// Message end
 				
