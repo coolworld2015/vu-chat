@@ -53,12 +53,22 @@ export default {
 	  }
 	},
 	created() {
+		this.notification = {
+			title: 'Something went wrong',
+			message: 'Server responded with status code error',
+			important: true
+		}
+		this.notification1 = {
+			title: 'New message',
+			message: `New message`
+		}
+		
 		this.fetchData();
 		
 		this.name = appConfig.name;
 		
 		if (window.ws == undefined) {
-			window.ws = new WebSocket('ws://jwt-chat.herokuapp.com');
+			window.ws = new WebSocket('wss://jwt-chat.herokuapp.com');
 			//window.ws = new WebSocket('ws://localhost:3000');
  
 		}
@@ -85,9 +95,11 @@ export default {
 					date: messageObject.split('###')[2],
 					message: messageObject.split('###')[0]
 				})
+			
+				appConfig.notifications.items.push(this.notification1);
+				appConfig.http = true;
+				appConfig.$emit('itemsCount', appConfig.messages.items.length);
 			}
-			appConfig.http = true;
-			appConfig.$emit('itemsCount', appConfig.messages.items.length);
 		};
 		
 		appConfig.$on('searchName', searchQuery => {
@@ -129,6 +141,7 @@ export default {
 				}).catch((error)=> {
 					appConfig.notifications.items.push(this.notification);
 					this.status = 'show';
+					this.$router.push('login');
 				})
 		},
 		handleScroll() {
