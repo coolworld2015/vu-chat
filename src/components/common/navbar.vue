@@ -14,8 +14,8 @@
 				  <span class="fp-nav-link menu-block-header">Chat</span>
 				</li>				
 				
-				<li class="fp-nav-item fp-nav-item-right" v-on:click="changeRoute('cars')" 
-					v-bind:class="{ active: cars }">
+				<li class="fp-nav-item fp-nav-item-right" v-on:click="changeRoute('chat')" 
+					v-bind:class="{ active: chat }">
 					<span class="fp-nav-link">Messages</span>
 				</li>				
 <!--				
@@ -48,8 +48,8 @@
 				  <span class="hot-key-hint">1</span>
 				</li>
 				
-				<li class="fp-nav-item fp-nav-item-left" v-on:click="changeRoute('cars')" 
-					v-bind:class="{ active: cars }">
+				<li class="fp-nav-item fp-nav-item-left" v-on:click="changeRoute('chat')" 
+					v-bind:class="{ active: chat }">
 					<span class="fp-nav-link" title="Items">MS</span>
 					<span class="hot-key-hint">2</span>
 				</li>				
@@ -90,7 +90,7 @@ export default {
 				searchQuery: '',
 				route: appConfig.route,
 				isActive: false,
-				cars: null,
+				chat: null,
 				find: null,
 				audits: null,
 				users: null,
@@ -116,10 +116,10 @@ export default {
 						this.find = false;
 					}					
 					
-					if (this.route == 'Cars') {
-						this.cars = true;
+					if (this.route == 'Chat') {
+						this.chat = true;
 					} else {
-						this.cars = false;
+						this.chat = false;
 					}
 					
 					if (this.route == 'Audits') {

@@ -58,7 +58,7 @@ export default {
 					localStorage.setItem('name', this.name);
 					this.loading = false;
 					this.error = false;
-					this.$router.push('cars');
+					this.$router.push('chat');
 				})
 				.catch((error)=> {
 					this.loading = false;

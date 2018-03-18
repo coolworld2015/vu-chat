@@ -4,10 +4,10 @@
 		<div class="content">
 			<main>
 				<section class="search-results">
-					<cars-header></cars-header> 
-					<cars-items></cars-items>
+					<chat-header></chat-header> 
+					<chat-items></chat-items>
 				</section>
-				<cars-footer></cars-footer> 
+				<chat-footer></chat-footer> 
 			</main>
 		</div>
 	</div>
@@ -16,15 +16,15 @@
 <script>
 import appConfig from '../../main';
 import navbar from '@/components/common/navbar';
-import carsHeader from '@/components/cars/header';
-import carsItems from '@/components/cars/items';
-import carsFooter from '@/components/cars/footer';
+import chatHeader from '@/components/chat/header';
+import chatItems from '@/components/chat/items';
+import chatFooter from '@/components/chat/footer';
 
 export default {
-  name: 'cars',
+  name: 'chat',
   data () {
     return {
-      route: 'Cars'
+      route: 'Chat'
     }
   },
 	created() {
@@ -39,9 +39,9 @@ export default {
 	},
 	components: {
 		navbar,
-		carsHeader,
-		carsItems,
-		carsFooter
+		chatHeader,
+		chatItems,
+		chatFooter
 	}
 }
 </script>

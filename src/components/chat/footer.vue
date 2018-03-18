@@ -39,7 +39,7 @@
 import appConfig from '../../main';
 
 export default {
-	name: 'users-footer',
+	name: 'chat-footer',
 	data() {
 	  return {
 		count: appConfig.sockets.items.length

@@ -40,7 +40,7 @@ import Vue from 'vue';
 import appConfig from '../../main';
 
 export default {
-	name: 'cars-items',
+	name: 'chat-items',
 	data() {
 	  return {
 		items: [],
@@ -57,8 +57,8 @@ export default {
 		this.name = appConfig.name;
 		
 		if (window.ws == undefined) {
-			//window.ws = new WebSocket('ws://jwt-chat.herokuapp.com');
-			window.ws = new WebSocket('ws://localhost:3000');
+			window.ws = new WebSocket('ws://jwt-chat.herokuapp.com');
+			//window.ws = new WebSocket('ws://localhost:3000');
  
 		}
 		ws.onerror = (e) => {

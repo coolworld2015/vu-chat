@@ -4,8 +4,7 @@ Vue.use(Router);
 
 import Login from '@/components/common/login';
 
-import Cars from '@/components/cars/cars';
-import CarEdit from '@/components/cars/edit';
+import Chat from '@/components/chat/chat';
 
 import Users from '@/components/users/users';
 import UserEdit from '@/components/users/edit';
@@ -20,8 +19,7 @@ export default new Router({
     { path: '*', component: Login },
     { path: '/login', component: Login },
 		
-	{ path: '/cars', component: Cars },
-	{ path: '/car-edit', component: CarEdit },
+	{ path: '/chat', component: Chat },
 	
     { path: '/users', component: Users },
     { path: '/user-edit', component: UserEdit },

@@ -117,7 +117,7 @@ import appConfig from '../../main';
 import navbar from '@/components/common/navbar';
 
 export default {
-	name: 'cars-edit',
+	name: 'chat-edit',
 	data() {
 		return {
 			model: '',
