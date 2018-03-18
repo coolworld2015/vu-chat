@@ -54,20 +54,7 @@ export default {
 			this.searchClear();
 		});
 	},
-	methods: {
-		changeSearch(value) {
-			if (value == 'name') {
-				this.name = true;
-				this.phone = false;
-				this.searchType = 'name';
-			}			
-			
-			if (value == 'phone') {
-				this.name = false;
-				this.phone = true;
-				this.searchType = 'phone';
-			}
-		},		
+	methods: {		
 		changeView(e) {
 			if (e.keyCode === 13) {this.searchName()}
 		},

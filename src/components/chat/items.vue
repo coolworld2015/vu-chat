@@ -8,8 +8,8 @@
 	<div v-else-if="status === 'show'" class="search-results-content">
  
 		<div class="payment" v-for="item in items" 
-			v-bind:class1="{ selected: (item.name == name)}"
-			v-on:click1="goSend(item)">			 
+			v-bind:class="{ selected: (item.id == selectedItem && clicked)}"
+			v-on:click="selectItem(item.id)">		 
 			<div class="search-results-item search-results-choose"  style="width: 5%;">
 				<span class="circle"></span>
 			</div>
@@ -49,6 +49,7 @@ export default {
 		positionY: 0,
 		status: 'show',
 		clicked: false,
+		selectedItem: ''
 	  }
 	},
 	created() {
@@ -73,8 +74,8 @@ export default {
 			//let date = new Date().toJSON().slice(0, 10);
 			//let time = new Date().toTimeString().slice(0, 8);
 			let messageObject = e.data;
-			console.log(messageObject)
-			console.log(this.items)
+			//console.log(messageObject)
+			//console.log(this.items)
 			if (messageObject.split('###')[0] != 'still alive') {
 				this.items.unshift({
 					id: +new Date(),
@@ -87,7 +88,7 @@ export default {
 		};
 		
 		appConfig.$on('searchName', searchQuery => {
-			console.log(searchQuery)
+			//console.log(searchQuery)
 			let messageObject;
 			messageObject = searchQuery + '###' + appConfig.name;
 			
@@ -209,34 +210,23 @@ export default {
 	},
 	methods: {
 	 	goSend() {
-		/*
-			if (this.state.messageText == '') {
-				this.setState({
-					invalidValue: true
-				});
-				return;
-			}
-		*/	
 			let messageObject;
 			messageObject = 'this.state.messageText' + '###' + appConfig.name;
-			
 			ws.send(messageObject);
-			
- 
 		},
 		fetchData() {
 			this.status = 'loading';
 			this.$http.get(appConfig.URL + 'messages/get', {headers: {'Authorization': appConfig.access_token}})
 				.then(result => {
-				console.log(result.data)
+				//console.log(result.data)
 					let items = result.data.sort(this.sort);
  
-					//appConfig.messages.items = items;
-					this.items = items.slice(0, 2000);
-					//this.filteredItems = items;
+					appConfig.messages.items = items;
+					this.items = items.slice(0, 20);
+					this.filteredItems = items;
 					this.status = 'show';
 					appConfig.$emit('itemsCount', result.data.length);
-					//setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
+					setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
 				}).catch((error)=> {
 					appConfig.notifications.items.push(this.notification);
 					this.status = 'show';
@@ -255,12 +245,12 @@ export default {
 				this.positionY = positionY + 400;
 			}
 		},
-		onItem(item) {
-			if (this.clicked) {
-				this.clicked = false;
-			} else {
-				this.clicked = true;
-			}
+		selectItem(id) {
+			this.selectedItem = id;
+			this.clicked = !this.clicked;
+		},
+		onItem() {
+			this.clicked = !this.clicked;
 		},			
 		showDetails(item){
 			appConfig.car = item;
