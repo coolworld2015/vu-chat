@@ -21,9 +21,9 @@ export default new Router({
 		
 	{ path: '/chat', component: Chat },
 	
-    { path: '/users', component: Users },
-    { path: '/user-edit', component: UserEdit },
-    { path: '/user-add', component: UserAdd },
+    //{ path: '/users', component: Users },
+    //{ path: '/user-edit', component: UserEdit },
+    //{ path: '/user-add', component: UserAdd },
 
 	{ path: '/audits', component: Audits },
 	{ path: '/audit-edit', component: AuditsEdit }

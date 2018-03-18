@@ -71,11 +71,7 @@ export default {
 		};
 
 		ws.onmessage = (e) => {
-			//let date = new Date().toJSON().slice(0, 10);
-			//let time = new Date().toTimeString().slice(0, 8);
 			let messageObject = e.data;
-			//console.log(messageObject)
-			//console.log(this.items)
 			if (messageObject.split('###')[0] != 'still alive') {
 				this.items.unshift({
 					id: +new Date(),
@@ -83,17 +79,26 @@ export default {
 					date: messageObject.split('###')[2],
 					message: messageObject.split('###')[0]
 				})
+				appConfig.messages.items.unshift({
+					id: +new Date(),
+					name: messageObject.split('###')[1],
+					date: messageObject.split('###')[2],
+					message: messageObject.split('###')[0]
+				})
 			}
-			appConfig.$emit('itemsCount', this.items.length);
+			appConfig.http = true;
+			appConfig.$emit('itemsCount', appConfig.messages.items.length);
 		};
 		
 		appConfig.$on('searchName', searchQuery => {
-			//console.log(searchQuery)
+			if (!appConfig.http) {
+				return;
+			}
+			
+			appConfig.http = false;
 			let messageObject;
 			messageObject = searchQuery + '###' + appConfig.name;
-			
 			ws.send(messageObject);	
- 
 		});
 		
 		this.notification = {
@@ -101,112 +106,6 @@ export default {
 			message: 'Server responded with status code error',
 			important: true
 		}
-//---------------------------------------------------------------------------------------------------
-	/*	
-		this.items = appConfig.sockets.items.sort(this.sort).slice(0, 20);
-		this.filteredItems = appConfig.sockets.items.sort(this.sort);
-		setTimeout(()=> {
-			if (document.querySelector('.search-results-content')) {
-				document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)
-			}
-		}, 100);
-		
-		if (appConfig.sockets.refresh) {
-            appConfig.sockets.refresh = false;
-			//this.fetchData();
-		}
-		
- 
-		appConfig.$on('clearHeader', () => {
-			this.status = 'show';
-			setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
-		})
-		appConfig.$on('searchQueryPhones', (searchQuery, searchType) => {
-			this.searchQuery = searchQuery;
-			let arr = [].concat(appConfig.sockets.items);
-			let items = [].concat(appConfig.sockets.items);
-			
-			if (searchType == 'name') {
-				items = arr.filter((el) => el.name.toLowerCase().indexOf(searchQuery.toLowerCase()) != -1);
-			} 
-			
-			if (searchType == 'phone') {
-				items = arr.filter((el) => el.phone.toLowerCase().indexOf(searchQuery.toLowerCase()) != -1);
-			}
-			
-			this.filteredItems = items;
-			this.items = items.slice(0, 20);
-			this.positionY = 0;
-			this.recordsCount = 20;
-			appConfig.$emit('itemsCount', items.length);
-			if (searchQuery == '') {
-				this.items = appConfig.sockets.items.slice(0, 20);
-				this.filteredItems = appConfig.sockets.items;
-			}
-		})
-		appConfig.$on('searchName', searchQuery => {
-				this.status = 'loading';
-				if (!appConfig.http) {
-					return;
-				}
-				
-				if (searchQuery !== '') {
-				appConfig.http = false;
-				this.$http.get(appConfig.URL + 'items/findByName/' + searchQuery, {headers: {'Authorization': appConfig.access_token}})
-					.then(result => {
-						let items = result.data.sort(this.sort);
-						items.forEach((el)=>{
-							if(el.phone == '') {el.phone = 'n/a'}	
-							if(el.job == '') {el.job = 'n/a'}	
-							if(el.pos == '') {el.pos = 'n/a'}	
-						})
-						appConfig.sockets.items = items;
-						this.items = items.slice(0, 20);
-						this.filteredItems = items;
-						appConfig.$emit('itemsCount', result.data.length);
-						setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
-						this.status = 'show';
-						appConfig.http = true;
-						appConfig.$emit('clearHeader');
-					}).catch((error)=> {
-						appConfig.notifications.items.push(this.notification);
-						this.status = 'show';
-						appConfig.http = true;
-					})
-				}
-		}),
-		appConfig.$on('searchPhone', searchQuery => {
-				this.status = 'loading';
-				if (!appConfig.http) {
-					return;
-				}
-				
-				if (searchQuery !== '') {
-				appConfig.http = false;
-				this.$http.get(appConfig.URL + 'items/findByPhone/' + searchQuery, {headers: {'Authorization': appConfig.access_token}})
-					.then(result => {
-						let items = result.data.sort(this.sort);
-						items.forEach((el)=>{
-							if(el.phone == '') {el.phone = 'n/a'}	
-							if(el.job == '') {el.job = 'n/a'}	
-							if(el.pos == '') {el.pos = 'n/a'}	
-						})
-						appConfig.sockets.items = items;
-						this.items = items.slice(0, 20);
-						this.filteredItems = items;
-						appConfig.$emit('itemsCount', result.data.length);
-						setTimeout(()=>{document.querySelector('.search-results-content').addEventListener('scroll', this.handleScroll)}, 100);
-						this.status = 'show';
-						appConfig.http = true;
-						appConfig.$emit('clearHeader');
-					}).catch((error)=> {
-						appConfig.notifications.items.push(this.notification);
-						this.status = 'show';
-						appConfig.http = true;
-					})
-				}
-		})
-	*/	
 	},
 	methods: {
 	 	goSend() {
