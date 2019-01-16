@@ -116,7 +116,7 @@
 				$rootScope.loading = true;
 				$rootScope.error = false;
 				
-				$http.get(url + 'api/items/get',
+				$http.get(url + 'api/messages/get',
 					{
 						headers: {'Authorization': $rootScope.access_token}
 					})

@@ -13,7 +13,7 @@ mongo shell
 show dbs
 db.getCollectionNames()
 
-use forpost
+use chat
 show collections
 
 db.createCollection("audits")
@@ -36,6 +36,9 @@ mongoexport -h ds053728.mongolab.com:53728 -d warehouse -c clients -u admin -p a
 mongoexport -h ds053728.mongolab.com:53728 -d warehouse -c goods -u admin -p admin -o goods1.json
 mongoexport -h ds053728.mongolab.com:53728 -d warehouse -c users -u admin -p admin -o users1.json
 
+.\mongoexport -h ds111059.mlab.com:11059 -d jwt-chat -c users -u admin -p admin -o users1.json
+.\mongoexport -h ds111059.mlab.com:11059 -d jwt-chat -c messages -u admin -p admin -o messages1.json
+
 -----------------------------------------------------------------------------------------------------
 //Set data to MongoLab
 mongoimport -h ds111059.mlab.com:11059 -d jwt-chat -c users -u admin -p admin --file users1.json
@@ -46,6 +49,9 @@ mongoimport --db forpost --collection audits --file audits.json
 mongoimport --db forpost --collection clients --file clients.json
 mongoimport --db forpost --collection goods --file goods.json
 mongoimport --db forpost --collection users --file users.json
+
+.\mongoimport --db chat --collection users --file users.json
+.\mongoimport --db chat --collection messages --file messages.json
 
 -----------------------------------------------------------------------------------------------------
 //Import/Export localData

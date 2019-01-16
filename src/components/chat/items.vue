@@ -68,8 +68,7 @@ export default {
 		this.name = appConfig.name;
 		
 		if (window.ws == undefined) {
-			window.ws = new WebSocket('wss://jwt-chat.herokuapp.com');
-			//window.ws = new WebSocket('ws://localhost:3000');
+			window.ws = new WebSocket(appConfig.WSS);
  
 		}
 		ws.onerror = (e) => {
